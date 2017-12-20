@@ -4,7 +4,7 @@ from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
 from collections import Counter
 from nltk import ngrams
-
+from pymongo import MongoClient
 
 
 
@@ -22,6 +22,19 @@ max_count = 1900
 earlier_tweet_id = 0
 tweet_count = 0
 bigrams = []
+
+client = MongoClient()
+db = client.pk_tweets
+
+
+def save_tweet_mongo(tweet):
+	post = tweet
+	post['_id'] = tweet['id'] 
+
+	try: 
+		db.tweets_collected.insert(post)
+	except Exception as exc:
+		print exc
 
 while max_count > tweet_count:
 
